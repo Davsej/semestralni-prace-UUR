@@ -2,72 +2,66 @@ import { Device } from '@/types/device';
 
 export interface DataProvider {
     getDevices(): Device[];
+    getDeviceById(id: string): Device | undefined;
 }
 
+function generateMeasures(startDate: string, numPoints: number, min: number, max: number, stepMinutes = 60) {
+    const measures = [];
+    let date = new Date(startDate);
 
+    for (let i = 0; i < numPoints; i++) {
+        measures.push({
+            timestamp: date.toISOString(),
+            value: +(Math.random() * (max - min) + min).toFixed(2)
+        });
+        date.setMinutes(date.getMinutes() + stepMinutes);
+    }
+
+    return measures;
+}
 
 export class MockData implements DataProvider {
-    getDevices() {
+
+    getDeviceById(id: string): Device | undefined {
+        const devices = this.getDevices();
+        return devices.find(device => device.id === id);
+    }
+
+    getDevices(): Device[] {
         const devices: Device[] = [
             {
                 id: '1',
-                name: 'Big freezer',
+                name: 'Velký mrazák',
                 lastUpdated: '2023-10-20T12:55:00Z',
                 status: 'online',
+                description: 'Mrazák používaný pro skladování potravin a simulaci nízkých teplot.',
                 sensors: [
                     {
                         id: '1-1',
-                        name: 'DHT22 - 1',
-                        description: 'Measures temperature and humidity',
+                        name: 'DHT22',
+                        description: 'Senzor měřící teplotu a vlhkost uvnitř mrazáku.',
                         channels: [
                             {
                                 measurementType: 'temperature',
-                                measures: [
-                                    {
-                                        timestamp: '2023-10-20T12:55:00Z',
-                                        value: 23.5
-                                    },
-                                    {
-                                        timestamp: '2023-10-21T12:55:00Z',
-                                        value: 24.0
-                                    }
-                                ],
-                                unit: '°C'
+                                unit: '°C',
+                                measures: generateMeasures('2023-10-20T00:00:00Z', 20, 20, 30)
                             },
                             {
                                 measurementType: 'humidity',
-                                measures: [
-                                    {
-                                        timestamp: '2023-10-20T12:55:00Z',
-                                        value: 80
-                                    },
-                                    {
-                                        timestamp: '2023-10-21T12:55:00Z',
-                                        value: 78
-                                    }
-                                ],
-                                unit: '%'
+                                unit: '%',
+                                measures: generateMeasures('2023-10-20T00:00:00Z', 20, 50, 90)
                             }
                         ]
                     },
                     {
                         id: '1-2',
-                        name: 'K33 BLG CO2',
-                        description: 'Measures CO2 levels',
+                        name: 'K33 BLG',
+                        description: 'Senzor pro měření koncentrace CO₂ ve vzduchu.',
                         channels: [
                             {
                                 measurementType: 'CO2',
-                                measures: [
-                                    {
-                                        timestamp: '2023-10-20T12:55:00Z',
-                                        value: 400
-                                    },
-                                    {
-                                        timestamp: '2023-10-21T12:55:00Z',
-                                        value: 420
-                                    }
-                                ],
-                                unit: 'ppm'
+                                unit: 'ppm',
+                                measures: generateMeasures('2023-10-20T00:00:00Z', 20, 400, 500)
                             }
                         ]
                     }
@@ -75,133 +69,79 @@ export class MockData implements DataProvider {
             },
             {
                 id: '2',
-                name: 'Heat rain',
+                name: 'Klimatická komora',
                 lastUpdated: '2023-10-21T14:00:00Z',
                 status: 'offline',
+                description: 'Zařízení simulující změny teploty a vlhkosti během dešťových podmínek.',
                 sensors: [
                     {
                         id: '2-1',
-                        name: 'Temp 1',
-                        description: 'Measures temperature',
+                        name: 'Teplotní senzor 1',
+                        description: 'Senzor měřící teplotu okolního prostředí.',
                         channels: [
                             {
                                 measurementType: 'temperature',
-                                measures: [
-                                    {
-                                        timestamp: '2023-10-20T12:55:00Z',
-                                        value: 23.5
-                                    },
-                                    {
-                                        timestamp: '2023-10-21T12:55:00Z',
-                                        value: 22.0
-                                    }
-                                ],
-                                unit: '°C'
+                                unit: '°C',
+                                measures: generateMeasures('2023-10-20T00:00:00Z', 20, 15, 25)
                             }
                         ]
                     },
                     {
                         id: '2-2',
-                        name: 'Humidity Sensor',
-                        description: 'Measures humidity',
+                        name: 'Teplotní senzor 2',
+                        description: 'Senzor měřící teplotu okolního prostředí.',
                         channels: [
                             {
-                                measurementType: 'humidity',
-                                measures: [
-                                    {
-                                        timestamp: '2023-10-20T12:55:00Z',
-                                        value: 60
-                                    },
-                                    {
-                                        timestamp: '2023-10-21T12:55:00Z',
-                                        value: 65
-                                    }
-                                ],
-                                unit: '%'
+                                measurementType: 'temperature',
+                                unit: '°C',
+                                measures: generateMeasures('2023-10-20T00:00:00Z', 20, 15, 25)
                             }
                         ]
                     },
                     {
-                        id: '2-2',
-                        name: 'Humidity Sensor',
-                        description: 'Measures humidity',
+                        id: '2-3',
+                        name: 'Teplotní senzor 3',
+                        description: 'Senzor měřící teplotu okolního prostředí.',
                         channels: [
                             {
-                                measurementType: 'humidity',
-                                measures: [
-                                    {
-                                        timestamp: '2023-10-20T12:55:00Z',
-                                        value: 60
-                                    },
-                                    {
-                                        timestamp: '2023-10-21T12:55:00Z',
-                                        value: 65
-                                    }
-                                ],
-                                unit: '%'
+                                measurementType: 'temperature',
+                                unit: '°C',
+                                measures: generateMeasures('2023-10-20T00:00:00Z', 20, 15, 25)
                             }
                         ]
                     },
                     {
-                        id: '2-2',
-                        name: 'Humidity Sensor',
-                        description: 'Measures humidity',
+                        id: '2-4',
+                        name: 'Teplotní senzor 4',
+                        description: 'Senzor měřící teplotu okolního prostředí.',
                         channels: [
                             {
-                                measurementType: 'humidity',
-                                measures: [
-                                    {
-                                        timestamp: '2023-10-20T12:55:00Z',
-                                        value: 60
-                                    },
-                                    {
-                                        timestamp: '2023-10-21T12:55:00Z',
-                                        value: 65
-                                    }
-                                ],
-                                unit: '%'
+                                measurementType: 'temperature',
+                                unit: '°C',
+                                measures: generateMeasures('2023-10-20T00:00:00Z', 20, 15, 25)
                             }
                         ]
                     },
                     {
-                        id: '2-2',
-                        name: 'Humidity Sensor',
-                        description: 'Measures humidity',
+                        id: '2-5',
+                        name: 'Teplotní senzor 5',
+                        description: 'Senzor měřící teplotu okolního prostředí.',
                         channels: [
                             {
-                                measurementType: 'humidity',
-                                measures: [
-                                    {
-                                        timestamp: '2023-10-20T12:55:00Z',
-                                        value: 60
-                                    },
-                                    {
-                                        timestamp: '2023-10-21T12:55:00Z',
-                                        value: 65
-                                    }
-                                ],
-                                unit: '%'
+                                measurementType: 'temperature',
+                                unit: '°C',
+                                measures: generateMeasures('2023-10-20T00:00:00Z', 20, 15, 25)
                             }
                         ]
                     },
                     {
-                        id: '2-2',
-                        name: 'Humidity Sensor',
-                        description: 'Measures humidity',
+                        id: '2-6',
+                        name: 'Senzor vlhkosti',
                         channels: [
                             {
                                 measurementType: 'humidity',
-                                measures: [
-                                    {
-                                        timestamp: '2023-10-20T12:55:00Z',
-                                        value: 60
-                                    },
-                                    {
-                                        timestamp: '2023-10-21T12:55:00Z',
-                                        value: 65
-                                    }
-                                ],
-                                unit: '%'
+                                unit: '%',
+                                measures: generateMeasures('2023-10-20T00:00:00Z', 20, 50, 90)
                             }
                         ]
                     }
@@ -209,48 +149,31 @@ export class MockData implements DataProvider {
             },
             {
                 id: '3',
-                name: 'CO2 Meter',
+                name: 'Měřič CO₂',
                 lastUpdated: '2023-10-22T09:30:00Z',
                 status: 'error',
                 sensors: [
                     {
                         id: '3-1',
                         name: 'K33 BLG',
-                        description: 'Measures CO2 levels',
+                        description: 'Hlavní senzor sledující koncentraci CO₂.',
                         channels: [
                             {
                                 measurementType: 'CO2',
-                                measures: [
-                                    {
-                                        timestamp: '2023-10-20T12:55:00Z',
-                                        value: 450
-                                    },
-                                    {
-                                        timestamp: '2023-10-21T12:55:00Z',
-                                        value: 460
-                                    }
-                                ],
-                                unit: 'ppm'
+                                unit: 'ppm',
+                                measures: generateMeasures('2023-10-20T00:00:00Z', 20, 400, 500)
                             }
                         ]
                     },
                     {
                         id: '3-2',
-                        name: 'CO2 Valve',
+                        name: 'CO₂ ventil',
+                        description: 'Senzor sledující stav ventilu na vstupu/výstupu CO₂.',
                         channels: [
                             {
                                 measurementType: 'CO2',
-                                measures: [
-                                    {
-                                        timestamp: '2023-10-20T12:55:00Z',
-                                        value: 470
-                                    },
-                                    {
-                                        timestamp: '2023-10-21T12:55:00Z',
-                                        value: 480
-                                    }
-                                ],
-                                unit: 'ppm'
+                                unit: 'ppm',
+                                measures: generateMeasures('2023-10-20T00:00:00Z', 20, 400, 500)
                             }
                         ]
                     }
@@ -258,49 +181,32 @@ export class MockData implements DataProvider {
             },
             {
                 id: '4',
-                name: 'Weather Station',
+                name: 'Meteostanice',
                 lastUpdated: '2023-10-22T10:00:00Z',
                 status: 'online',
+                description: 'Stanice sledující aktuální povětrnostní podmínky.',
                 sensors: [
                     {
                         id: '4-1',
-                        name: 'Wind Sensor',
-                        description: 'Measures wind speed',
+                        name: 'Senzor větru',
+                        description: 'Senzor měřící rychlost větru.',
                         channels: [
                             {
-                                measurementType: 'CO2',
-                                measures: [
-                                    {
-                                        timestamp: '2023-10-20T12:55:00Z',
-                                        value: 15
-                                    },
-                                    {
-                                        timestamp: '2023-10-21T12:55:00Z',
-                                        value: 20
-                                    }
-                                ],
-                                unit: 'km/h'
+                                measurementType: 'windSpeed',
+                                unit: 'km/h',
+                                measures: generateMeasures('2023-10-20T00:00:00Z', 20, 5, 30)
                             }
                         ]
                     },
                     {
                         id: '4-2',
-                        name: 'Rain Gauge',
-                        description: 'Measures rainfall',
+                        name: 'Dešťový senzor',
+                        description: 'Senzor zaznamenávající množství srážek.',
                         channels: [
                             {
-                                measurementType: 'text',
-                                measures: [
-                                    {
-                                        timestamp: '2023-10-20T12:55:00Z',
-                                        value: 5
-                                    },
-                                    {
-                                        timestamp: '2023-10-21T12:55:00Z',
-                                        value: 10
-                                    }
-                                ],
-                                unit: 'mm'
+                                measurementType: 'rainfall',
+                                unit: 'mm',
+                                measures: generateMeasures('2023-10-20T00:00:00Z', 20, 0, 20)
                             }
                         ]
                     }
@@ -309,6 +215,5 @@ export class MockData implements DataProvider {
         ];
 
         return devices;
-
     }
 }

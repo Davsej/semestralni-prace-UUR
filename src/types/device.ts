@@ -1,12 +1,13 @@
 export type DeviceStatus = 'online' | 'offline' | 'error';
 
-export type MeasurementType = 'humidity' | 'temperature' | 'battery' | 'CO2' | 'number' | 'text';
+export type MeasurementType = 'humidity' | 'temperature' | 'battery' | 'CO2' | 'rainfall' | 'windSpeed' | 'number' | 'text';
 
 type TimestampString = string; // ISO timestamp
 
 export interface Device {
     id: string;
     name: string;
+    description?: string;
     lastUpdated: TimestampString;
     status: DeviceStatus;
     sensors: Sensor[];

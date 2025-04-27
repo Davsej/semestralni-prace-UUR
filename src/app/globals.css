@@ -127,6 +127,20 @@
   }
 
   .container {
-    @apply w-full mx-auto !max-w-[1350px] px-[4vw];
+    @apply w-full mx-auto px-[4vw];
   }
+}
+
+.container {
+  @apply max-w-[1350px];
+}
+
+
+/*FORMS*/
+
+
+
+
+[data-slot="form-message"] {
+  @apply text-xs mt-[-5px];
 }
