@@ -22,7 +22,7 @@ import {
 
 export const DeviceCard = ({ device }: { device: Device }) => {
     return <>
-        <Card className="gap-2 pt-0 overflow-clip border border-slate-200  dark:border-slate-700 shadow-sm rounded-lg">
+        <Card className="gap-2 pt-0 overflow-clip border border-slate-200 dark:bg-slate-900  dark:border-slate-700 shadow-sm rounded-lg">
             <Link href={`/device-detail/${device.id}`}>
                 <CardHeader className={cn("flex transition border-b border-slate-200  [&:hover_h2]:underline dark:border-slate-700 pt-6 pb-4 flex-col lg:justify-between lg:items-start",
                     device.status === "online" && false && "bg-[#f7fff9] hover:bg-[hsl(135,100%,96%)] dark:bg-[#0e170e] hover:dark:bg-[#1a2b1a]",

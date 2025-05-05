@@ -16,7 +16,7 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "noImplicitReturns": false,
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "module": "esnext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,

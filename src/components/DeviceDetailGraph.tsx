@@ -10,13 +10,23 @@ interface DeviceDetailGraphProps {
     unit: string
 }
 
-const CustomTooltip = ({ active, payload, label, unit }: any) => {
+const CustomTooltip = ({
+    active,
+    payload,
+    label,
+    unit,
+}: {
+    active?: boolean;
+    payload?: { color: string; value: number }[];
+    label?: string | number;
+    unit: string;
+}) => {
     if (active && payload && payload.length) {
         const formattedDate = formatDate(label)
         return (
             <div className="rounded-lg border bg-background p-2 shadow-sm">
                 <p className="text-xs text-muted-foreground">{formattedDate}</p>
-                {payload.map((entry: any, index: number) => (
+                {payload.map((entry: { color: string; value: number }, index: number) => (
                     <div key={`item-${index}`} className="flex gap-2 py-1 items-center">
                         <div className="h-2 w-2 rounded-full" style={{ backgroundColor: entry.color }} />
                         <span className="text-sm font-medium">
@@ -71,7 +81,11 @@ export function DeviceDetailGraph({ data, unit }: DeviceDetailGraphProps) {
                     width={40}
                     color="var(--custom-graph-axis)"
                 />
-                <ChartTooltip cursor={false} content={<CustomTooltip unit={unit} />} />
+                <ChartTooltip
+                    cursor={false}
+                    // @ts-expect-error – vypne chybu na následujícím řádku
+                    content={(tooltipProps) => <CustomTooltip {...tooltipProps} unit={unit} />}
+                />
 
                 <Line
                     dataKey="value"

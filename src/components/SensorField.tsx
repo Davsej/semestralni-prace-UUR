@@ -11,6 +11,7 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Measurement } from "@/types/device"
 
 type SensorFieldProps = {
     index: number
@@ -32,7 +33,7 @@ export default function SensorField({ index, onRemove, canRemove }: SensorFieldP
     }
 
     const removeMeasurement = (mIndex: number) => {
-        const updatedMeasurements = measurements.filter((_: any, i: number) => i !== mIndex)
+        const updatedMeasurements = measurements.filter((_: Measurement, i: number) => i !== mIndex)
         setValue(`sensors.${index}.measurements`, updatedMeasurements)
     }
 
@@ -71,7 +72,7 @@ export default function SensorField({ index, onRemove, canRemove }: SensorFieldP
                 />
 
                 <div className="flex flex-col gap-2">
-                    {measurements.map((measurement: any, mIndex: number) => {
+                    {measurements.map((measurement: Measurement, mIndex: number) => {
                         const showRemove = measurements.length > 1
 
                         return (

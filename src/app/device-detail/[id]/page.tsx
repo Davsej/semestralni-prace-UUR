@@ -14,15 +14,14 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 
-
-
 // import { TimeBadge } from "@/components/TimeBadge"
 // import { SensorRow } from "@/components/SenzorRow"
+type Params = Promise<{ id: string }>
 
+export default async function Page({ params }: { params: Params }) {
 
-export default function Page({ params }: { params: { id: string } }) {
-
-    const deviceId = params.id;
+    const { id } = await params;
+    const deviceId = id;
     const dataProvider: DataProvider = new MockData();
     const device: Device | undefined = dataProvider.getDeviceById(deviceId);
 

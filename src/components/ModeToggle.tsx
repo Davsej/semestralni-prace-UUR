@@ -16,7 +16,7 @@ export function ModeToggle() {
       setTheme("system");
       localStorage.setItem("defaultThemeSet", "true");
     }
-  }, []);
+  });
 
   return (
     <Button variant="outline" size="icon" onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
