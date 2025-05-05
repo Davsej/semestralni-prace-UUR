@@ -1,5 +1,5 @@
 
-import { Wind, BatteryIcon, ThermometerIcon, DropletIcon, Info } from 'lucide-react';
+// import { Wind, BatteryIcon, ThermometerIcon, DropletIcon, Info } from 'lucide-react';
 
 import { cn } from "@/lib/utils"
 

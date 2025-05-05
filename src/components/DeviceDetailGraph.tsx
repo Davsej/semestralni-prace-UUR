@@ -1,6 +1,6 @@
 "use client"
 
-import { Area, CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts"
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts"
 import { ChartContainer, ChartTooltip } from "@/components/ui/chart"
 
 import type { Measurement } from "@/types/device"

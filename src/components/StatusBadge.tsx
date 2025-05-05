@@ -1,4 +1,4 @@
-import { Device, DeviceStatus, Sensor, MeasurementType } from "@/types/device";
+import { DeviceStatus } from "@/types/device";
 
 
 

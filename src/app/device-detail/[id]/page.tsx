@@ -16,8 +16,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 
 
-import { TimeBadge } from "@/components/TimeBadge"
-import { SensorRow } from "@/components/SenzorRow"
+// import { TimeBadge } from "@/components/TimeBadge"
+// import { SensorRow } from "@/components/SenzorRow"
 
 
 export default function Page({ params }: { params: { id: string } }) {

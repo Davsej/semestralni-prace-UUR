@@ -3,7 +3,7 @@ import { ModeToggle } from "./ModeToggle";
 import AboutAplicationDialogButton from "./AboutAplicationDialogButton";
 
 import Link from "next/link"
-import Image from "next/image";
+// import Image from "next/image";
 
 const Header = () => {
     return (

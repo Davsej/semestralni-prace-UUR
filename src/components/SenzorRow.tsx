@@ -9,7 +9,7 @@ import { MeasurementBadge } from "@/components/MeasurementBadge"
 import {
     Tooltip,
     TooltipContent,
-    TooltipProvider,
+    // TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
 

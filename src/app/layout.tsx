@@ -7,8 +7,8 @@ import React from 'react';
 
 import { cn } from "@/lib/utils";
 
-import { GeistSans } from 'geist/font/sans';
-import { GeistMono } from 'geist/font/mono';
+// import { GeistSans } from 'geist/font/sans';
+// import { GeistMono } from 'geist/font/mono';
 
 interface RootLayoutProps {
   children: React.ReactNode;

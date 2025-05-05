@@ -14,10 +14,10 @@ import Link from "next/link";
 import {
     Card,
     CardContent,
-    CardDescription,
-    CardFooter,
+    // CardDescription,
+    // CardFooter,
     CardHeader,
-    CardTitle,
+    // CardTitle,
 } from "@/components/ui/card"
 
 export const DeviceCard = ({ device }: { device: Device }) => {

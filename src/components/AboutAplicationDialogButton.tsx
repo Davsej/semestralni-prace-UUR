@@ -1,6 +1,6 @@
 
 import { DialogTrigger, Dialog, DialogContent, DialogTitle, DialogDescription, DialogHeader } from "./ui/dialog";
-import { Button } from "./ui/button";
+// import { Button } from "./ui/button";
 
 const AboutAplicationDialog = () => {
     return (
