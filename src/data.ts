@@ -42,12 +42,12 @@ export class MockData implements DataProvider {
                         description: 'Senzor měřící teplotu a vlhkost uvnitř mrazáku.',
                         channels: [
                             {
-                                measurementType: 'temperature',
+                                name: 'Teplota',
                                 unit: '°C',
                                 measures: generateMeasures('2023-10-20T00:00:00Z', 20, 20, 30)
                             },
                             {
-                                measurementType: 'humidity',
+                                name: 'Vlhkost',
                                 unit: '%',
                                 measures: generateMeasures('2023-10-20T00:00:00Z', 20, 50, 90)
                             }
@@ -59,7 +59,7 @@ export class MockData implements DataProvider {
                         description: 'Senzor pro měření koncentrace CO₂ ve vzduchu.',
                         channels: [
                             {
-                                measurementType: 'CO2',
+                                name: 'CO2',
                                 unit: 'ppm',
                                 measures: generateMeasures('2023-10-20T00:00:00Z', 20, 400, 500)
                             }
@@ -80,7 +80,7 @@ export class MockData implements DataProvider {
                         description: 'Senzor měřící teplotu okolního prostředí.',
                         channels: [
                             {
-                                measurementType: 'temperature',
+                                name: 'Teplota',
                                 unit: '°C',
                                 measures: generateMeasures('2023-10-20T00:00:00Z', 20, 15, 25)
                             }
@@ -92,7 +92,7 @@ export class MockData implements DataProvider {
                         description: 'Senzor měřící teplotu okolního prostředí.',
                         channels: [
                             {
-                                measurementType: 'temperature',
+                                name: 'Teplota',
                                 unit: '°C',
                                 measures: generateMeasures('2023-10-20T00:00:00Z', 20, 15, 25)
                             }
@@ -104,7 +104,7 @@ export class MockData implements DataProvider {
                         description: 'Senzor měřící teplotu okolního prostředí.',
                         channels: [
                             {
-                                measurementType: 'temperature',
+                                name: 'Teplota',
                                 unit: '°C',
                                 measures: generateMeasures('2023-10-20T00:00:00Z', 20, 15, 25)
                             }
@@ -116,7 +116,7 @@ export class MockData implements DataProvider {
                         description: 'Senzor měřící teplotu okolního prostředí.',
                         channels: [
                             {
-                                measurementType: 'temperature',
+                                name: 'Teplota',
                                 unit: '°C',
                                 measures: generateMeasures('2023-10-20T00:00:00Z', 20, 15, 25)
                             }
@@ -128,7 +128,7 @@ export class MockData implements DataProvider {
                         description: 'Senzor měřící teplotu okolního prostředí.',
                         channels: [
                             {
-                                measurementType: 'temperature',
+                                name: 'Teplota',
                                 unit: '°C',
                                 measures: generateMeasures('2023-10-20T00:00:00Z', 20, 15, 25)
                             }
@@ -139,7 +139,7 @@ export class MockData implements DataProvider {
                         name: 'Senzor vlhkosti',
                         channels: [
                             {
-                                measurementType: 'humidity',
+                                name: 'Vlhkost',
                                 unit: '%',
                                 measures: generateMeasures('2023-10-20T00:00:00Z', 20, 50, 90)
                             }
@@ -159,7 +159,7 @@ export class MockData implements DataProvider {
                         description: 'Hlavní senzor sledující koncentraci CO₂.',
                         channels: [
                             {
-                                measurementType: 'CO2',
+                                name: 'CO2',
                                 unit: 'ppm',
                                 measures: generateMeasures('2023-10-20T00:00:00Z', 20, 400, 500)
                             }
@@ -171,7 +171,7 @@ export class MockData implements DataProvider {
                         description: 'Senzor sledující stav ventilu na vstupu/výstupu CO₂.',
                         channels: [
                             {
-                                measurementType: 'CO2',
+                                name: 'CO2',
                                 unit: 'ppm',
                                 measures: generateMeasures('2023-10-20T00:00:00Z', 20, 400, 500)
                             }
@@ -192,7 +192,7 @@ export class MockData implements DataProvider {
                         description: 'Senzor měřící rychlost větru.',
                         channels: [
                             {
-                                measurementType: 'windSpeed',
+                                name: 'Rychlost větru',
                                 unit: 'km/h',
                                 measures: generateMeasures('2023-10-20T00:00:00Z', 20, 5, 30)
                             }
@@ -204,7 +204,7 @@ export class MockData implements DataProvider {
                         description: 'Senzor zaznamenávající množství srážek.',
                         channels: [
                             {
-                                measurementType: 'rainfall',
+                                name: 'Srážky',
                                 unit: 'mm',
                                 measures: generateMeasures('2023-10-20T00:00:00Z', 20, 0, 20)
                             }

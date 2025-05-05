@@ -5,6 +5,11 @@ import Header from "@/components/Header";
 import { ThemeProvider } from "@/components/theme-provider"
 import React from 'react';
 
+import { cn } from "@/lib/utils";
+
+import { GeistSans } from 'geist/font/sans';
+import { GeistMono } from 'geist/font/mono';
+
 interface RootLayoutProps {
   children: React.ReactNode;
 }
@@ -29,7 +34,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <>
       <html lang="en" suppressHydrationWarning>
         <head />
-        <body>
+        <body className={cn(geistSans.variable, geistMono.variable)}>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"

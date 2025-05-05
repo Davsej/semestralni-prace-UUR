@@ -13,9 +13,17 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip"
 
-export const SensorRow = ({ sensor }: { sensor: Sensor }) => {
+export const SensorRow = ({ sensor, selectedMeasurementId, index, onMeasurementClick }: { sensor: Sensor, selectedMeasurementId?: number | undefined, index: number | undefined, onMeasurementClick?: (sensorIndex: number, value: number) => void | undefined }) => {
+
+
+    const handleMeasurementClick = (MeasurementIndex: number | undefined) => {
+        if (MeasurementIndex !== undefined && index !== undefined && onMeasurementClick) {
+            onMeasurementClick(index, MeasurementIndex);
+        }
+    };
+
     return (
-        <div className="p-2 py-3 last:border-0 last:pb-0 border-b border-gray-200 dark:border-gray-700 flex flex-row justify-between">
+        <div className="p-2 py-3 last:border-0 last:pb-0 border-b border-slate-200 dark:border-slate-700 flex flex-row justify-between">
 
             {
                 !sensor.description &&
@@ -39,9 +47,11 @@ export const SensorRow = ({ sensor }: { sensor: Sensor }) => {
             }
 
             <div className="flex flex-row gap-2 flex-wrap justify-end lg:flex-nowrap">
-                {sensor.channels.map((channel) => (
-                    <div key={channel.measurementType} className="flex justify-between items-center">
-                        <MeasurementBadge type={channel.measurementType} value={channel.measures.length > 0 ? `${channel.measures[0].value}` : "N/A"} unit={channel.unit} />
+                {sensor.channels.map((channel, index) => (
+                    <div key={channel.name} className="flex justify-between items-center">
+                        {
+                            <MeasurementBadge onClick={handleMeasurementClick} index={index} selected={selectedMeasurementId == index} value={channel.measures.length > 0 ? `${channel.measures[0].value}` : "N/A"} unit={channel.unit} />
+                        }
                     </div>
                 ))}
             </div>

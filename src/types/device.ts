@@ -1,6 +1,5 @@
 export type DeviceStatus = 'online' | 'offline' | 'error';
 
-export type MeasurementType = 'humidity' | 'temperature' | 'battery' | 'CO2' | 'rainfall' | 'windSpeed' | 'number' | 'text';
 
 type TimestampString = string; // ISO timestamp
 
@@ -21,7 +20,7 @@ export interface Sensor {
 }
 
 export interface SenzorChannel {
-    measurementType: MeasurementType;
+    name?: string
     measures: Measurement[];
     unit: string;
 }

@@ -6,7 +6,9 @@ const AboutAplicationDialog = () => {
     return (
         <Dialog>
             <DialogTrigger>
-                <Button variant="outline">O aplikaci</Button>
+                <div className="text-sm text-slate-700 dark:text-slate-50 cursor-pointer">
+                    O aplikaci
+                </div>
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>

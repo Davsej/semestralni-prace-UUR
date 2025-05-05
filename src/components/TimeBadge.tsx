@@ -12,9 +12,10 @@ interface TimeBadgeProps {
     timestamp: string | Date
     className?: string
     showIcon?: boolean
+    variant?: "default" | "ghost"
 }
 
-export const TimeBadge = ({ timestamp, className, showIcon = true }: TimeBadgeProps) => {
+export const TimeBadge = ({ timestamp, className, showIcon = true, variant = "default" }: TimeBadgeProps) => {
 
     const formatTimestamp = (timestamp: string | Date): string => {
         const date = typeof timestamp === "string" ? new Date(timestamp) : timestamp
@@ -29,16 +30,23 @@ export const TimeBadge = ({ timestamp, className, showIcon = true }: TimeBadgePr
 
     const formattedTime = formatTimestamp(timestamp)
 
-    return (
-        <Badge
-            variant="outline"
-            className={cn(
-                "inline-flex bg-white dark:bg-slate-700 items-center rounded-full border text-xs font-semibold transition-colors px-3 py-1",
-                className,
-            )}
-        >
-            {showIcon && <Clock className="h-3 w-3" />}
-            <span>{formattedTime}</span>
-        </Badge>
-    )
+
+    if (variant === "default") {
+
+        return (
+
+            <Badge
+                variant="outline"
+                className={cn(
+                    "inline-flex bg-slate-50 dark:bg-slate-700 items-center rounded-full border text-xs font-semibold transition-colors px-3 py-1",
+                    className,
+                )}
+            >
+                {showIcon && <Clock className="h-3 w-3" />}
+                <span>{formattedTime}</span>
+            </Badge>
+        )
+    } else if (variant === "ghost") {
+        return <div className='text-xs text-slate-500 dark:text-slate-300'>{formattedTime}</div>
+    }
 }

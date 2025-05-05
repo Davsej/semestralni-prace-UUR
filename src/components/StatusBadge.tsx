@@ -21,7 +21,7 @@ export const StatusBadge = ({ status }: { status: DeviceStatus }) => {
             label: "Offline",
             icon: WifiOff,
             customClass:
-                "bg-slate-100 text-slate-800 dark:text-slate-100 dark:bg-slate-800",
+                "bg-slate-50 text-slate-800 dark:text-slate-100 dark:bg-slate-800",
         },
         error: {
             label: "Error",
