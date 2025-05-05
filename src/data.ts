@@ -7,7 +7,7 @@ export interface DataProvider {
 
 function generateMeasures(startDate: string, numPoints: number, min: number, max: number, stepMinutes = 60) {
     const measures = [];
-    let date = new Date(startDate);
+    const date = new Date(startDate);
 
     for (let i = 0; i < numPoints; i++) {
         measures.push({
