@@ -14,7 +14,7 @@ const AboutAplicationDialog = () => {
                 <DialogHeader>
                     <DialogTitle>David Šejna - IoT Dashboard</DialogTitle>
                     <DialogDescription>
-                        <p>A22B0465P</p>
+                        <p>A24B0465P</p>
                         <p>Semestrální práce UUR 2025</p>
                     </DialogDescription>
                 </DialogHeader>

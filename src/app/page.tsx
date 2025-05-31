@@ -14,6 +14,7 @@ import { Plus } from "lucide-react"
 import { Masonry } from 'react-plock';
 
 export default function MainDashboard() {
+
   const dataProvider: DataProvider = new MockData();
   const devices: Device[] = dataProvider.getDevices();
 

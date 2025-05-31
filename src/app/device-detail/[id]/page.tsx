@@ -13,10 +13,10 @@ import { Badge } from "@/components/ui/badge";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-
 // import { TimeBadge } from "@/components/TimeBadge"
 // import { SensorRow } from "@/components/SenzorRow"
 type Params = Promise<{ id: string }>
+
 
 export default async function Page({ params }: { params: Params }) {
 
@@ -43,6 +43,9 @@ export default async function Page({ params }: { params: Params }) {
         )
 
     }
+
+
+    console.log(device)
 
     return (
         <main>
@@ -72,26 +75,17 @@ export default async function Page({ params }: { params: Params }) {
                                 value="history"
                                 className="cursor-pointer data-[state=active]:bg-white dark:data-[state=active]:bg-slate-700 data-[state=active]:shadow-sm rounded-md px-4 py-3 text-sm font-medium"
                             >
-                                Historie měření
+                                Historie měření a export
                             </TabsTrigger>
-                            <TabsTrigger
-                                value="configuration"
-                                className="cursor-pointer data-[state=active]:bg-white dark:data-[state=active]:bg-slate-700 data-[state=active]:shadow-sm rounded-md px-4 py-3 text-sm font-medium"
-                            >
-                                Konfigurace zařízení
-                            </TabsTrigger>
+
                         </TabsList>
                         <TabsContent value="overview">
                             <DeviceGeneralTab device={device} />
                         </TabsContent>
                         <TabsContent value="history">
                             <DeviceHistoryTab
-                                columns={[]}
-                                data={[]}
+                                device={device}
                             />
-                        </TabsContent>
-                        <TabsContent value="configuration">
-                            <p className="text-sm text-slate-500">Zde bude obsah pro záložku Konfigurace zařízení.</p>
                         </TabsContent>
                     </Tabs>
                 </div>
