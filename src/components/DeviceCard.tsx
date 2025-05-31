@@ -9,6 +9,8 @@ import { cn } from "@/lib/utils"
 import { TimeBadge } from "@/components/TimeBadge"
 import { SensorRow } from "@/components/SenzorRow"
 
+import { ExternalLink } from "lucide-react";
+
 import Link from "next/link";
 
 import {
@@ -29,7 +31,7 @@ export const DeviceCard = ({ device }: { device: Device }) => {
                     device.status === "error" && false && "bg-[#fff5f5] hover:bg-[hsl(0,100%,97%)] dark:bg-[#281515] dark:hover:bg-[#3b1f1f]",
                     device.status === "offline" && false && "bg-[#fcfeff] hover:bg-[hsl(200,100%,98%)] dark:bg-[#0c111f] dark:hover:bg-[#1a1f2e]",
                 )}>
-                    <h2 className="inline-block mb-2 lg:w-max w-full md:w-auto text-lg font-semibold leading-[1.15]">{device.name}</h2>
+                    <h2 className="mb-2 lg:w-max w-full md:w-auto text-lg font-semibold leading-[1.15] flex items-center gap-1.5">{device.name} <ExternalLink className="w-3 h-3 text-slate-400" /></h2>
                     <div className="flex gap-3 flex-wrap lg:flex-nowrap items-center ml-auto lg:ml-0">
                         <TimeBadge variant="ghost" timestamp={device.lastUpdated} />
                         <StatusBadge status={device.status}></StatusBadge>
