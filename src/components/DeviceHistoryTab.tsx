@@ -20,7 +20,6 @@ import {
 import { Button } from "@/components/ui/button"
 
 
-import { useState } from "react"
 
 import { Device } from '@/types/device'
 
