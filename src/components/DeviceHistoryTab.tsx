@@ -19,14 +19,6 @@ import {
 
 import { Button } from "@/components/ui/button"
 
-import {
-    Dialog,
-    DialogTrigger,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogFooter,
-} from "@/components/ui/dialog"
 
 import { useState } from "react"
 
@@ -107,59 +99,28 @@ export function DeviceHistoryTab({ device }: { device: Device }) {
         getCoreRowModel: getCoreRowModel(),
     })
 
-    const handleExport = (fromDate: string, toDate: string) => {
-        console.log("Export od:", fromDate)
-        console.log("Export do:", toDate)
-        // TODO: add CSV export logic here
-    }
-
-    const ExportDialog = () => {
-        const [from, setFrom] = useState("")
-        const [to, setTo] = useState("")
-
-        return (
-            <Dialog>
-                <DialogTrigger asChild>
-                    <Button variant="outline">Exportovat data</Button>
-                </DialogTrigger>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>Export dat</DialogTitle>
-                    </DialogHeader>
-                    <div className="flex flex-col gap-4">
-                        <div className="flex flex-col gap-2">
-                            <Label htmlFor="from">Od</Label>
-                            <Input
-                                type="datetime-local"
-                                id="from"
-                                value={from}
-                                onChange={(e) => setFrom(e.target.value)}
-                            />
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            <Label htmlFor="to">Do</Label>
-                            <Input
-                                type="datetime-local"
-                                id="to"
-                                value={to}
-                                onChange={(e) => setTo(e.target.value)}
-                            />
-                        </div>
-                    </div>
-                    <DialogFooter>
-                        <Button onClick={() => handleExport(from, to)}>Exportovat</Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
-        )
-    }
 
     return (
-        <div>
+        <div >
             <div className="flex justify-end mb-4">
-                <ExportDialog />
+                <div className="flex justify-end items-end flex-row gap-4">
+                    <div className="flex flex-col gap-2">
+                        <Label htmlFor="from">Od</Label>
+                        <Input
+                            type="date"
+                            id="from"
+                        />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                        <Label htmlFor="to">Do</Label>
+                        <Input
+                            type="date"
+                            id="to"
+                        />
+                    </div>
+                    <Button>Exportovat</Button>
+                </div>
             </div>
-
             <div className="overflow-x-auto rounded-md border">
                 <Table>
                     <TableHeader>
@@ -199,6 +160,6 @@ export function DeviceHistoryTab({ device }: { device: Device }) {
                     </TableBody>
                 </Table>
             </div>
-        </div>
+        </div >
     )
 }
