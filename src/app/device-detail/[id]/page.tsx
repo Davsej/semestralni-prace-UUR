@@ -11,6 +11,8 @@ import { DeviceHistoryTab } from "@/components/DeviceHistoryTab"
 
 import { Badge } from "@/components/ui/badge";
 
+import { ChevronLeft } from "lucide-react";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 // import { TimeBadge } from "@/components/TimeBadge"
@@ -33,8 +35,11 @@ export default async function Page({ params }: { params: Params }) {
                         <h1 className="text-2xl font-medium mt-[-4px]">
                             Zařízení nenalezeno
                         </h1>
-                        <Button variant={"outline"} size={"sm"} asChild>
-                            <Link href="/">Zpět</Link>
+                        <Button variant="outline" size="sm" asChild>
+                            <Link href="/" className="flex items-center gap-2">
+                                <ChevronLeft />
+                                Zpět
+                            </Link>
                         </Button>
                     </div>
 
@@ -44,13 +49,18 @@ export default async function Page({ params }: { params: Params }) {
 
     }
 
-
-    console.log(device)
-
     return (
         <main>
-            <section className="lg:py-18 py-12">
+            <section className="lg:py-18 py-12 lg:pt-12">
                 <div className="container mb-10">
+                    <div className="flex lg:flex-row flex-col items-center lg:gap-6 gap-2 mb-8">
+                        <Button variant="outline" size="sm" asChild>
+                            <Link href="/" className="flex items-center gap-2">
+                                <ChevronLeft />
+                                Zpět
+                            </Link>
+                        </Button>
+                    </div>
                     <div className="flex lg:flex-row flex-col items-center lg:gap-6 gap-2 mb-2">
                         <h1 className="text-2xl font-medium mt-[-4px]">
                             {device.name}

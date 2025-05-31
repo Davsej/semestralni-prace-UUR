@@ -7,6 +7,7 @@ import {
     useReactTable,
 } from "@tanstack/react-table"
 
+
 import {
     Table,
     TableBody,
@@ -20,6 +21,7 @@ import { Button } from "@/components/ui/button"
 
 import {
     Dialog,
+    DialogTrigger,
     DialogContent,
     DialogHeader,
     DialogTitle,
@@ -33,20 +35,19 @@ import { Device } from '@/types/device'
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-
 type CombinedRecord = {
     timestamp: string
-    [measurementLabel: string]: number | string // např. "Teplota (°C)" → 22.5
+    [measurementLabel: string]: number | string
 }
-
-
 
 export function mapDeviceToCombinedRecords(device: Device): CombinedRecord[] {
     const recordsMap: Map<string, CombinedRecord> = new Map()
 
     for (const sensor of device.sensors) {
         for (const channel of sensor.channels) {
-            const label = `${channel.name ?? "Veličina"} (${channel.unit})`
+            const sensorName = sensor.name ?? "Senzor"
+            const channelName = channel.name ?? "Veličina"
+            const label = `${sensorName} – ${channelName} (${channel.unit})`
 
             for (const measure of channel.measures) {
                 if (measure.value === "N/A") continue
@@ -79,7 +80,9 @@ export function getColumnsFromDevice(device: Device): ColumnDef<CombinedRecord>[
 
     for (const sensor of device.sensors) {
         for (const channel of sensor.channels) {
-            const label = `${channel.name ?? "Veličina"} (${channel.unit})`
+            const sensorName = sensor.name ?? "Senzor"
+            const channelName = channel.name ?? "Veličina"
+            const label = `${sensorName} – ${channelName} (${channel.unit})`
             labels.add(label)
         }
     }
@@ -94,14 +97,9 @@ export function getColumnsFromDevice(device: Device): ColumnDef<CombinedRecord>[
     return base
 }
 
-
 export function DeviceHistoryTab({ device }: { device: Device }) {
-    const data = mapDeviceToCombinedRecords(device);
-    const columns = getColumnsFromDevice(device);
-
-    const [open, setOpen] = useState(false)
-    const [from, setFrom] = useState("")
-    const [to, setTo] = useState("")
+    const data = mapDeviceToCombinedRecords(device)
+    const columns = getColumnsFromDevice(device)
 
     const table = useReactTable({
         data,
@@ -109,64 +107,57 @@ export function DeviceHistoryTab({ device }: { device: Device }) {
         getCoreRowModel: getCoreRowModel(),
     })
 
-    const handleExport = () => {
-        console.log("Export od:", from)
-        console.log("Export do:", to)
-        setOpen(false)
+    const handleExport = (fromDate: string, toDate: string) => {
+        console.log("Export od:", fromDate)
+        console.log("Export do:", toDate)
+        // TODO: add CSV export logic here
     }
 
-    const handleOpenDialog = () => {
-        setOpen(true)
-    }
+    const ExportDialog = () => {
+        const [from, setFrom] = useState("")
+        const [to, setTo] = useState("")
 
-    const handleCloseDialog = () => {
-        setOpen(false)
-        setFrom("")
-        setTo("")
+        return (
+            <Dialog>
+                <DialogTrigger asChild>
+                    <Button variant="outline">Exportovat data</Button>
+                </DialogTrigger>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Export dat</DialogTitle>
+                    </DialogHeader>
+                    <div className="flex flex-col gap-4">
+                        <div className="flex flex-col gap-2">
+                            <Label htmlFor="from">Od</Label>
+                            <Input
+                                type="datetime-local"
+                                id="from"
+                                value={from}
+                                onChange={(e) => setFrom(e.target.value)}
+                            />
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            <Label htmlFor="to">Do</Label>
+                            <Input
+                                type="datetime-local"
+                                id="to"
+                                value={to}
+                                onChange={(e) => setTo(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                    <DialogFooter>
+                        <Button onClick={() => handleExport(from, to)}>Exportovat</Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+        )
     }
 
     return (
         <div>
             <div className="flex justify-end mb-4">
-                <Button variant="outline" onClick={handleOpenDialog}>
-                    Exportovat data
-                </Button>
-
-                <Dialog open={open} onOpenChange={setOpen}>
-                    <DialogContent className="sm:max-w-[425px]">
-                        <DialogHeader>
-                            <DialogTitle>Export dat</DialogTitle>
-                        </DialogHeader>
-                        <div className="flex flex-col gap-4 py-4">
-                            <div className="flex flex-col gap-2">
-                                <Label htmlFor="from">Od</Label>
-                                <Input
-                                    type="datetime-local"
-                                    id="from"
-                                    value={from}
-                                    onChange={(e) => setFrom(e.target.value)}
-                                />
-                            </div>
-                            <div className="flex flex-col gap-2">
-                                <Label htmlFor="to">Do</Label>
-                                <Input
-                                    type="datetime-local"
-                                    id="to"
-                                    value={to}
-                                    onChange={(e) => setTo(e.target.value)}
-                                />
-                            </div>
-                        </div>
-                        <DialogFooter>
-                            <Button variant="outline" onClick={handleCloseDialog}>
-                                Zrušit
-                            </Button>
-                            <Button onClick={handleExport} disabled={!from || !to}>
-                                Exportovat
-                            </Button>
-                        </DialogFooter>
-                    </DialogContent>
-                </Dialog>
+                <ExportDialog />
             </div>
 
             <div className="overflow-x-auto rounded-md border">
@@ -190,10 +181,7 @@ export function DeviceHistoryTab({ device }: { device: Device }) {
                     <TableBody>
                         {table.getRowModel().rows.length ? (
                             table.getRowModel().rows.map((row) => (
-                                <TableRow
-                                    key={row.id}
-                                    data-state={row.getIsSelected() && "selected"}
-                                >
+                                <TableRow key={row.id}>
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id} className="text-nowrap">
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}

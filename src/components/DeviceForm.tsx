@@ -116,19 +116,6 @@ export default function DeviceForm() {
                             )}
                         />
 
-                        <FormField
-                            control={control}
-                            name="deviceId"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>ID zařízení</FormLabel>
-                                    <FormControl>
-                                        <Input {...field} readOnly disabled />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
                     </div>
 
                     <FormField

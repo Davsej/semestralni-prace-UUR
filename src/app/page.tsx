@@ -27,7 +27,7 @@ export default function MainDashboard() {
           </h1>
 
           <Button variant={"outline"} size={"sm"} asChild>
-            <Link href="/add-new-device"><Plus /> Přidat další</Link>
+            <Link href="/add-new-device"><Plus /> Přidat nové</Link>
 
           </Button>
         </div>
