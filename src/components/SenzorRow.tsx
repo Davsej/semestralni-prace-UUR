@@ -13,7 +13,7 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip"
 
-export const SensorRow = ({ sensor, selectedMeasurementId, index, onMeasurementClick }: { sensor: Sensor, selectedMeasurementId?: number | undefined, index: number | undefined, onMeasurementClick?: (sensorIndex: number, value: number) => void | undefined }) => {
+export const SensorRow = ({ sensor, selectedChannels, index, onMeasurementClick }: { sensor: Sensor, selectedChannels?: { sensorIndex: number; channelIndex: number; }[] | undefined, index: number | undefined, onMeasurementClick?: (sensorIndex: number, value: number) => void | undefined }) => {
 
 
     const handleMeasurementClick = (MeasurementIndex: number | undefined) => {
@@ -47,11 +47,17 @@ export const SensorRow = ({ sensor, selectedMeasurementId, index, onMeasurementC
             }
 
             <div className="flex flex-row gap-2 flex-wrap justify-end lg:flex-nowrap">
-                {sensor.channels.map((channel, index) => (
+                {sensor.channels.map((channel, channelIndex) => (
                     <div key={channel.name} className="flex justify-between items-center">
-                        {
-                            <MeasurementBadge onClick={handleMeasurementClick} index={index} selected={selectedMeasurementId == index} value={channel.measures.length > 0 ? `${channel.measures[0].value}` : "N/A"} unit={channel.unit} />
-                        }
+                        <MeasurementBadge
+                            onClick={() => handleMeasurementClick(channelIndex)}
+                            index={channelIndex}
+                            selected={selectedChannels?.some(sel =>
+                                sel.sensorIndex === index && sel.channelIndex === channelIndex
+                            )}
+                            value={channel.measures.length > 0 ? `${channel.measures[0].value}` : "N/A"}
+                            unit={channel.unit}
+                        />
                     </div>
                 ))}
             </div>

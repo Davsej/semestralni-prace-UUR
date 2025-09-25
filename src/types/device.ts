@@ -21,11 +21,28 @@ export interface Sensor {
 
 export interface SenzorChannel {
     name?: string
-    measures: Measurement[];
+    measures: Measurement[] | [];
     unit: string;
 }
 
 export interface Measurement {
     timestamp: TimestampString;
     value: number | "N/A";
+    conversion?: string;
+}
+
+
+
+export interface DeviceFormData {
+    deviceName: string;
+    deviceDescription?: string;
+    sensors?: {
+        name: string;
+        description?: string;
+        measurements?: {
+            label: string;
+            unit?: string;
+            conversion?: string;
+        }[];
+    }[];
 }

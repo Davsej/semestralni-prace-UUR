@@ -21,7 +21,7 @@ export const TimeBadge = ({ timestamp, className, showIcon = true, variant = "de
         const date = typeof timestamp === "string" ? new Date(timestamp) : timestamp
 
         return new Intl.DateTimeFormat("cs-CZ", {
-            day: "2-digit",
+            day: "numeric",
             month: "numeric",
             hour: "2-digit",
             minute: "2-digit",

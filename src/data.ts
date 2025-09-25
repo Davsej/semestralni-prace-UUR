@@ -1,24 +1,20 @@
-import { Device } from '@/types/device';
+import { Device, DeviceFormData } from '@/types/device';
+import fs from 'fs';
+
+//NEW nově jsem přidal funkci getDataProvider
+export function getDataProvider(): DataProvider {
+    return new MockData();
+}
 
 export interface DataProvider {
     getDevices(): Device[];
     getDeviceById(id: string): Device | undefined;
+    addDevice(device: Device): Device;
+    removeDevice(id: string): boolean;
+    updateDevice(id: string, updatedDevice: Device): Device | undefined;
 }
 
-function generateMeasures(startDate: string, numPoints: number, min: number, max: number, stepMinutes = 60) {
-    const measures = [];
-    const date = new Date(startDate);
 
-    for (let i = 0; i < numPoints; i++) {
-        measures.push({
-            timestamp: date.toISOString(),
-            value: +(Math.random() * (max - min) + min).toFixed(2)
-        });
-        date.setMinutes(date.getMinutes() + stepMinutes);
-    }
-
-    return measures;
-}
 
 export class MockData implements DataProvider {
 
@@ -28,192 +24,42 @@ export class MockData implements DataProvider {
     }
 
     getDevices(): Device[] {
-        const devices: Device[] = [
-            {
-                id: '1',
-                name: 'Velký mrazák',
-                lastUpdated: '2023-10-20T12:55:00Z',
-                status: 'online',
-                description: 'Mrazák používaný pro skladování potravin a simulaci nízkých teplot.',
-                sensors: [
-                    {
-                        id: '1-1',
-                        name: 'DHT22',
-                        description: 'Senzor měřící teplotu a vlhkost uvnitř mrazáku.',
-                        channels: [
-                            {
-                                name: 'Teplota',
-                                unit: '°C',
-                                measures: generateMeasures('2023-10-20T00:00:00Z', 20, 20, 30)
-                            },
-                            {
-                                name: 'Vlhkost',
-                                unit: '%',
-                                measures: generateMeasures('2023-10-20T00:00:00Z', 20, 50, 90)
-                            }
-                        ]
-                    },
-                    {
-                        id: '1-2',
-                        name: 'K33 BLG',
-                        description: 'Senzor pro měření koncentrace CO₂ ve vzduchu.',
-                        channels: [
-                            {
-                                name: 'CO2',
-                                unit: 'ppm',
-                                measures: generateMeasures('2023-10-20T00:00:00Z', 20, 400, 500)
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                id: '2',
-                name: 'Klimatická komora',
-                lastUpdated: '2023-10-21T14:00:00Z',
-                status: 'offline',
-                description: 'Zařízení simulující změny teploty a vlhkosti během dešťových podmínek.',
-                sensors: [
-                    {
-                        id: '2-1',
-                        name: 'Teplotní senzor 1',
-                        description: 'Senzor měřící teplotu okolního prostředí.',
-                        channels: [
-                            {
-                                name: 'Teplota',
-                                unit: '°C',
-                                measures: generateMeasures('2023-10-20T00:00:00Z', 20, 15, 25)
-                            }
-                        ]
-                    },
-                    {
-                        id: '2-2',
-                        name: 'Teplotní senzor 2',
-                        description: 'Senzor měřící teplotu okolního prostředí.',
-                        channels: [
-                            {
-                                name: 'Teplota',
-                                unit: '°C',
-                                measures: generateMeasures('2023-10-20T00:00:00Z', 20, 15, 25)
-                            }
-                        ]
-                    },
-                    {
-                        id: '2-3',
-                        name: 'Teplotní senzor 3',
-                        description: 'Senzor měřící teplotu okolního prostředí.',
-                        channels: [
-                            {
-                                name: 'Teplota',
-                                unit: '°C',
-                                measures: generateMeasures('2023-10-20T00:00:00Z', 20, 15, 25)
-                            }
-                        ]
-                    },
-                    {
-                        id: '2-4',
-                        name: 'Teplotní senzor 4',
-                        description: 'Senzor měřící teplotu okolního prostředí.',
-                        channels: [
-                            {
-                                name: 'Teplota',
-                                unit: '°C',
-                                measures: generateMeasures('2023-10-20T00:00:00Z', 20, 15, 25)
-                            }
-                        ]
-                    },
-                    {
-                        id: '2-5',
-                        name: 'Teplotní senzor 5',
-                        description: 'Senzor měřící teplotu okolního prostředí.',
-                        channels: [
-                            {
-                                name: 'Teplota',
-                                unit: '°C',
-                                measures: generateMeasures('2023-10-20T00:00:00Z', 20, 15, 25)
-                            }
-                        ]
-                    },
-                    {
-                        id: '2-6',
-                        name: 'Senzor vlhkosti',
-                        channels: [
-                            {
-                                name: 'Vlhkost',
-                                unit: '%',
-                                measures: generateMeasures('2023-10-20T00:00:00Z', 20, 50, 90)
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                id: '3',
-                name: 'Měřič CO₂',
-                lastUpdated: '2023-10-22T09:30:00Z',
-                status: 'error',
-                sensors: [
-                    {
-                        id: '3-1',
-                        name: 'K33 BLG',
-                        description: 'Hlavní senzor sledující koncentraci CO₂.',
-                        channels: [
-                            {
-                                name: 'CO2',
-                                unit: 'ppm',
-                                measures: generateMeasures('2023-10-20T00:00:00Z', 20, 400, 500)
-                            }
-                        ]
-                    },
-                    {
-                        id: '3-2',
-                        name: 'CO₂ ventil',
-                        description: 'Senzor sledující stav ventilu na vstupu/výstupu CO₂.',
-                        channels: [
-                            {
-                                name: 'CO2',
-                                unit: 'ppm',
-                                measures: generateMeasures('2023-10-20T00:00:00Z', 20, 400, 500)
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                id: '4',
-                name: 'Meteostanice',
-                lastUpdated: '2023-10-22T10:00:00Z',
-                status: 'online',
-                description: 'Stanice sledující aktuální povětrnostní podmínky.',
-                sensors: [
-                    {
-                        id: '4-1',
-                        name: 'Senzor větru',
-                        description: 'Senzor měřící rychlost větru.',
-                        channels: [
-                            {
-                                name: 'Rychlost větru',
-                                unit: 'km/h',
-                                measures: generateMeasures('2023-10-20T00:00:00Z', 20, 5, 30)
-                            }
-                        ]
-                    },
-                    {
-                        id: '4-2',
-                        name: 'Dešťový senzor',
-                        description: 'Senzor zaznamenávající množství srážek.',
-                        channels: [
-                            {
-                                name: 'Srážky',
-                                unit: 'mm',
-                                measures: generateMeasures('2023-10-20T00:00:00Z', 20, 0, 20)
-                            }
-                        ]
-                    }
-                ]
-            }
-        ];
-
+        const data = fs.readFileSync('src/devices.json', 'utf-8');
+        const devices: Device[] = JSON.parse(data);
         return devices;
     }
+
+    addDevice(device: Device): Device {
+        const devices = this.getDevices();
+        devices.unshift(device);
+        fs.writeFileSync('src/devices.json', JSON.stringify(devices, null, 2));
+        return device;
+    }
+
+    removeDevice(id: string): boolean {
+        const devices = this.getDevices();
+        const index = devices.findIndex(device => device.id === id);
+        if (index === -1) return false;
+
+        devices.splice(index, 1);
+        fs.writeFileSync('src/devices.json', JSON.stringify(devices, null, 2));
+        return true;
+    }
+
+    updateDevice(id: string, updatedDevice: Device): Device | undefined {
+        const devices = this.getDevices();
+        const index = devices.findIndex(device => device.id === id);
+        if (index === -1) return undefined;
+
+        devices[index] = { ...devices[index], ...updatedDevice };
+        fs.writeFileSync('src/devices.json', JSON.stringify(devices, null, 2));
+        return devices[index];
+    }
+
+
+
 }
+
+
+
+

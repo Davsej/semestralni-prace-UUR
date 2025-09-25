@@ -1,11 +1,14 @@
 
 
-import DeviceForm from "@/components/DeviceForm"
 import { ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link"
+import AddNewDeviceForm from "@/components/addNewDeviceForm";
 
 export default function AddNewDevice() {
+
+
+
     return (
         <section className="lg:py-18 py-12">
 
@@ -21,7 +24,7 @@ export default function AddNewDevice() {
                 <h1 className="text-2xl font-medium mt-[-4px] mb-8">
                     Přidat nové zařízení
                 </h1>
-                <DeviceForm></DeviceForm>
+                <AddNewDeviceForm></AddNewDeviceForm>
             </div>
 
 

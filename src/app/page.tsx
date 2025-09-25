@@ -1,21 +1,21 @@
-"use client"
 
 import { Button } from "@/components/ui/button";
 import { DeviceCard } from "@/components/DeviceCard";
 
 import Link from "next/link"
 
-import { DataProvider, MockData } from '@/data';
+import { DataProvider, getDataProvider, MockData } from '@/data';
 import { Device } from '@/types/device'
 
 import { Plus } from "lucide-react"
 
 
 import { Masonry } from 'react-plock';
+import { DeviceGrid } from "@/components/DeviceGrid";
 
 export default function MainDashboard() {
 
-  const dataProvider: DataProvider = new MockData();
+  const dataProvider: DataProvider = getDataProvider();
   const devices: Device[] = dataProvider.getDevices();
 
   return (
@@ -32,17 +32,7 @@ export default function MainDashboard() {
           </Button>
         </div>
         <div className="container">
-          <Masonry
-            items={devices}
-            config={{
-              columns: [1, 2, 3],
-              gap: [16, 24, 40],
-              media: [567, 768, 1024],
-            }}
-            render={(device) => (
-              <DeviceCard key={device.id} device={device}></DeviceCard>
-            )}
-          />
+          <DeviceGrid devices={devices} />
         </div>
       </section>
     </main>

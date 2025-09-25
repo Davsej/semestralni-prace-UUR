@@ -1,102 +1,116 @@
-"use client"
+"use client";
 
-import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts"
-import { ChartContainer, ChartTooltip } from "@/components/ui/chart"
+import {
+    CartesianGrid,
+    Line,
+    LineChart,
+    XAxis,
+    YAxis,
+    Tooltip as RechartsTooltip,
+    ResponsiveContainer,
+} from "recharts";
+import type { Measurement } from "@/types/device";
+import { ChartContainer } from "@/components/ui/chart";
 
-import type { Measurement } from "@/types/device"
+interface SeriesItem {
+    name: string;
+    unit?: string;
+    data: Measurement[];
+}
+
+import React from "react";
 
 interface DeviceDetailGraphProps {
-    data: Measurement[]
-    unit: string
+    series: SeriesItem[];
 }
+
+const formatDate = (timestamp: string | number) => {
+    const date = new Date(timestamp);
+    const day = date.getDate().toString();
+    const month = (date.getMonth() + 1).toString();
+    const year = date.getFullYear().toString().slice(-2);
+    const hours = date.getHours().toString();
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    const seconds = date.getSeconds().toString().padStart(2, "0");
+    return `${day}.${month}.${year} ${hours}:${minutes}:${seconds}`;
+};
 
 const CustomTooltip = ({
     active,
     payload,
     label,
-    unit,
 }: {
     active?: boolean;
-    payload?: { color: string; value: number }[];
+    payload?: any[];
     label?: string | number;
-    unit: string;
 }) => {
     if (active && payload && payload.length) {
-        const formattedDate = formatDate(label)
+        const formattedDate = formatDate(label);
         return (
-            <div className="rounded-lg border bg-background p-2 shadow-sm">
-                <p className="text-xs text-muted-foreground">{formattedDate}</p>
-                {payload.map((entry: { color: string; value: number }, index: number) => (
-                    <div key={`item-${index}`} className="flex gap-2 py-1 items-center">
-                        <div className="h-2 w-2 rounded-full" style={{ backgroundColor: entry.color }} />
-                        <span className="text-sm font-medium">
-                            {entry.value} {unit}
-                        </span>
+            <div className="rounded-lg border bg-background p-2 shadow-sm text-sm">
+                <p className="text-xs text-muted-foreground mb-1">{formattedDate}</p>
+                {payload.map((entry, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                        <div
+                            className="h-2 w-2 rounded-full"
+                            style={{ backgroundColor: entry.color }}
+                        />
+                        <span>{entry.name}: {entry.value} {entry.unit || ""}</span>
                     </div>
                 ))}
             </div>
-        )
+        );
     }
-    return null
-}
+    return null;
+};
 
-const formatDate = (timestamp: string | number) => {
-    const date = new Date(timestamp)
+export function DeviceDetailGraph({ series }: DeviceDetailGraphProps) {
+    const mergedData: Record<string, any> = {};
 
-    const day = date.getDate().toString()
-    const month = (date.getMonth() + 1).toString()
-    const year = date.getFullYear().toString().slice(-2)
+    series.forEach(({ name, data }) => {
+        data.forEach(measure => {
+            if (!mergedData[measure.timestamp]) {
+                mergedData[measure.timestamp] = { timestamp: measure.timestamp };
+            }
+            mergedData[measure.timestamp][name] = measure.value;
+        });
+    });
 
-    const hours = date.getHours().toString()
-    const minutes = date.getMinutes().toString().padStart(2, "0")
-    const seconds = date.getSeconds().toString().padStart(2, "0")
-
-    return `${day}.${month}.${year} ${hours}:${minutes}:${seconds}`
-}
-
-export function DeviceDetailGraph({ data, unit }: DeviceDetailGraphProps) {
-    const chartConfig = {
-        value: {
-            label: unit,
-            unit: unit,
-        },
-    }
+    const chartData = Object.values(mergedData).sort((a: any, b: any) =>
+        new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+    );
 
     return (
-        <ChartContainer config={chartConfig}>
-            <LineChart data={data} margin={{ left: 0, right: 0, top: 0, bottom: 0 }}>
-                <CartesianGrid vertical={true} />
-                <XAxis
-                    dataKey="timestamp"
-                    tickLine={true}
-                    axisLine={true}
-                    tickMargin={8}
-                    tickFormatter={(value) => formatDate(value)}
-                    color="var(--custom-graph-axis)"
-                />
-                <YAxis
-                    tickLine={true}
-                    axisLine={true}
-                    tickMargin={8}
-                    width={40}
-                    color="var(--custom-graph-axis)"
-                />
-                <ChartTooltip
-                    cursor={false}
-                    // @ts-expect-error – vypne chybu na následujícím řádku
-                    content={(tooltipProps) => <CustomTooltip {...tooltipProps} unit={unit} />}
-                />
+        <ChartContainer config={{}}>
+            <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={chartData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis
+                        dataKey="timestamp"
+                        tickFormatter={formatDate}
+                        tickLine
+                        axisLine
+                        tickMargin={8}
+                    />
+                    <YAxis tickLine axisLine tickMargin={8} width={40} />
+                    <RechartsTooltip content={<CustomTooltip />} />
 
-                <Line
-                    dataKey="value"
-                    stroke="var(--custom-graph-line)"
-                    strokeWidth={2}
-                    dot={{ r: 4, fill: "var(--custom-graph-line)", strokeWidth: 1 }}
-                    connectNulls={false}
-                    type="linear"
-                    activeDot={{ r: 6, fill: "var(--custom-graph-dot-active)", stroke: "white", strokeWidth: 2 }}
-                />
-            </LineChart>
+                    {series.map((s, i) => {
+                        const key = `series_${i}`
+                        return <Line
+                            key={key}
+                            type="linear"
+                            dataKey={s.name}
+                            name={s.name}
+                            stroke={`hsl(${i * 60}, 70%, 50%)`} // Generate a color based on index
+                            strokeWidth={2}
+                            dot={{ r: 3 }}
+                            activeDot={{ r: 5 }}
+                            connectNulls
+                        />
+                    })}
+                </LineChart>
+            </ResponsiveContainer>
         </ChartContainer>
-    )
+    );
 }

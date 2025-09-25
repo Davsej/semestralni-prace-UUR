@@ -19,18 +19,15 @@ import { Button } from "@/components/ui/button"
 import { Textarea } from "./ui/textarea"
 import SensorField from "./SensorField"
 
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogFooter,
-    DialogClose,
-} from "@/components/ui/dialog"
+import { useRouter } from 'next/navigation';
+
+
+
+
+import { DeviceFormData } from "@/types/device"
 
 const schema = z.object({
     deviceName: z.string().min(1, "Povinné"),
-    deviceId: z.string().min(1, "Povinné"),
     deviceDescription: z.string().optional(),
     sensors: z.array(
         z.object({
@@ -49,12 +46,14 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-export default function DeviceForm() {
+export default function DeviceForm({ submitCallback, defaultValues, btnText, resetAfterSubmit }: { submitCallback: (data: FormData) => void, defaultValues?: DeviceFormData, btnText?: string, resetAfterSubmit?: boolean }) {
+
+    const router = useRouter();
+
     const methods = useForm<FormData>({
         resolver: zodResolver(schema),
-        defaultValues: {
+        defaultValues: defaultValues || {
             deviceName: "",
-            deviceId: "52",
             deviceDescription: "",
             sensors: [
                 {
@@ -68,8 +67,6 @@ export default function DeviceForm() {
     });
 
     const { control, handleSubmit, setValue, watch, formState, reset } = methods;
-
-    const [successOpen, setSuccessOpen] = useState(false);
 
     const sensors = watch("sensors");
 
@@ -91,10 +88,11 @@ export default function DeviceForm() {
 
     const onSubmit = async (data: FormData) => {
         console.log(data);
-
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        reset();
-        setSuccessOpen(true);
+        await submitCallback(data);
+        if (resetAfterSubmit) { //TODO: tady by to chtělo lepší logiku, aby se formulář resetoval a naplnil se ihned lepšími daty, než ho neresetovat. Můžou tam zbýt chyby, kdyby nastal třeba error v ukládání na backendu
+            reset();
+        }
+        router.refresh();
     };
 
     return (
@@ -154,24 +152,12 @@ export default function DeviceForm() {
                     </Button>
 
                     <Button type="submit" className="mt-6" disabled={formState.isSubmitting}>
-                        {formState.isSubmitting ? "Ukládám..." : "Přidat zařízení"}
+                        {formState.isSubmitting ? "Ukládám..." : (btnText || "Přidat zařízení")}
                     </Button>
                 </form>
             </Form>
 
-            {/* Success Modal */}
-            <Dialog open={successOpen} onOpenChange={setSuccessOpen}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>Zařízení bylo úspěšně přidáno!</DialogTitle>
-                    </DialogHeader>
-                    <DialogFooter>
-                        <DialogClose asChild>
-                            <Button variant="default">Zavřít</Button>
-                        </DialogClose>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
+
         </>
     );
 }

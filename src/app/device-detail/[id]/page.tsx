@@ -8,12 +8,14 @@ import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/StatusBadge";
 import { DeviceGeneralTab } from "@/components/DeviceGeneralTab"
 import { DeviceHistoryTab } from "@/components/DeviceHistoryTab"
+import { DeviceEditTab } from "@/components/DeviceEditTab"
 
 import { Badge } from "@/components/ui/badge";
 
 import { ChevronLeft } from "lucide-react";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { getDataProvider } from "@/data";
 
 // import { TimeBadge } from "@/components/TimeBadge"
 // import { SensorRow } from "@/components/SenzorRow"
@@ -24,7 +26,7 @@ export default async function Page({ params }: { params: Params }) {
 
     const { id } = await params;
     const deviceId = id;
-    const dataProvider: DataProvider = new MockData();
+    const dataProvider: DataProvider = getDataProvider();
     const device: Device | undefined = dataProvider.getDeviceById(deviceId);
 
     if (!device) {
@@ -87,6 +89,12 @@ export default async function Page({ params }: { params: Params }) {
                             >
                                 Historie měření a export
                             </TabsTrigger>
+                            <TabsTrigger
+                                value="edit"
+                                className="cursor-pointer data-[state=active]:bg-white dark:data-[state=active]:bg-slate-700 data-[state=active]:shadow-sm rounded-md px-4 py-3 text-sm font-medium"
+                            >
+                                Nastavení
+                            </TabsTrigger>
 
                         </TabsList>
                         <TabsContent value="overview">
@@ -94,6 +102,11 @@ export default async function Page({ params }: { params: Params }) {
                         </TabsContent>
                         <TabsContent value="history">
                             <DeviceHistoryTab
+                                device={device}
+                            />
+                        </TabsContent>
+                        <TabsContent value="edit">
+                            <DeviceEditTab
                                 device={device}
                             />
                         </TabsContent>
